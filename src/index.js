@@ -1,19 +1,4 @@
-// Wave 2: Amber
-// clickable element to increase temp
-// clickable element to decrease temp
-// element to display landscape
-
-// Wave 3: Fabiola
-// Name the city
-
-// Wave 4: Fabiola and Amber
-// Calling API's
-
-// Wave 5: Gabby 
-// Selecting the sky
-
-// Wave 6: Gabby
-// Reset city name
+const axios = require('axios');
 
 //Wave 1
 const state = {
@@ -97,14 +82,29 @@ const registerEventHandlers = (event) => {
 document.addEventListener("DOMContentLoaded",registerEventHandlers)
 
 // WAVE 4
-// Call weather and LocationIQ APIs
+//How to make an API call using OpenWeather
+//https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
+const findLatitudeAndLongtitude = (latitude,longitude) => {
+    axios.get('https://us1.locationiq.com/v1/search.php',
+    { 
+    params: {
+        key: LOCATION_KEY,	
+        format: 'json',
+        lat: latitude,
+        lon: longitude
+    }
+})
+    .then( (response) => {
+        latitude = response.data[0].lat;
+        longtitude = response.data[0].lon;
+    })
+    .catch( (error) => {
+        console.log("hey this error works!")
+    });
 
-const axios = require('axios');
 
-axios
-    .get('url')
-    .then((response) => {
-        ))
+
+
 
 
 
