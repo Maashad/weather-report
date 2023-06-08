@@ -43,10 +43,7 @@ const handleDecreaseTempClick = (event) => {
 };
 
 const displayLandscape = (event) => {
-    console.log("clickedAlso")
-
     if (state.tempCount < 59) {
-        console.log(state.tempCount)
         state.landscapeDiv.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲"
     } else if (state.tempCount <= 69) {
         state.landscapeDiv.textContent = "🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃"
@@ -54,11 +51,7 @@ const displayLandscape = (event) => {
         state.landscapeDiv.textContent = "🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷"
     } else if (state.tempCount >= 80) {
         state.landscapeDiv.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂"
-    } else {
-        state.landscapeDiv.textContent = "something here"
-        console.log("yo")
-    }
-};
+}};
 
 const temperatureColor = (event) => {
     pass
@@ -81,7 +74,6 @@ const registerEvents = (event) => {
     state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
     state.currentTempButton.addEventListener("click", handleCurrentTempClick);
     state.skySelection.addEventListener("change", displaySky);
-    // state.displayLandscape.addEventListener("change", displayLandscape);
 };
 
 document.addEventListener("DOMContentLoaded", registerEvents);
