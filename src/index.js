@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 //Wave 1
 const state = {
     // HTML elements
@@ -68,6 +66,8 @@ const onLoad = () => {
     registerEvents();
 };
 
+onLoad();
+
 //WAVE 3
 //function validate(input,error)<- do we want to validate/return error message
 const changeCity =(event) => {
@@ -100,12 +100,4 @@ const findLatitudeAndLongtitude = (latitude,longitude) => {
     })
     .catch( (error) => {
         console.log("hey this error works!")
-    });
-
-
-
-
-
-
-
-onLoad();
+    })};
