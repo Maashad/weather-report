@@ -11,7 +11,7 @@ grid-gap: 1rem;
 font-family: "Rubik", sans-serif;
 font-size: 18px;
 margin: 2rem;
-background-image: url('../images/sky.png');
+background-image: url('../assets/sky.png');
 background-size: cover;
 min-height: 100%;
 background-repeat: no-repeat;

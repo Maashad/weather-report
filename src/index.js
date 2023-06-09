@@ -5,9 +5,11 @@ const state = {
     increaseTempControl: null,
     decreaseTempControl: null,
     landscapeDiv: null,
+    header__cityName: null,
+    headerCityNameDiv: 'Seattle, Washington',
     // Data
     tempValue: null,
-    tempCount: 55, // change this to the const for temp pulled in from API?
+    tempCount: 55, // change this to the const for temp pulled in from API
     skySelection: null,
     skyDiv: null,
 };
@@ -21,6 +23,8 @@ const loadControls = () => {
     state.skySelection = document.getElementById("skySelect");
     state.skyDiv = document.getElementById("sky");
     state.landscapeDiv = document.getElementById("landscape");
+    state.header__cityName = document.getElementById("header__cityName");
+    state.headerCityNameDiv = document.getElementById("headerCityName");
 };
 
 const handleCurrentTempClick = (event) => {
@@ -40,6 +44,10 @@ const handleDecreaseTempClick = (event) => {
     // When clicking on the decrease temp button, the temp value should decrease by 1
     state.tempCount -= 1;
     state.tempValue.textContent = state.tempCount;
+};
+
+const displayCityName = (event) => {
+    state.header__cityName.textContent = state.headerCityNameDiv;
 };
 
 const displayLandscape = (event) => {
@@ -78,14 +86,6 @@ const registerEvents = (event) => {
 
 document.addEventListener("DOMContentLoaded", registerEvents);
 
-const onLoad = () => {
-    // do what we need to do when the page loads
-    loadControls();
-    registerEvents();
-};
-
-onLoad();
-
 //WAVE 3
 //function validate(input,error)<- do we want to validate/return error message
 const changeCity =(event) => {
@@ -93,29 +93,86 @@ const changeCity =(event) => {
     const cityName = document.getElementById("headerCityName")
     cityName.textContent = value;
 }
+
 const registerEventHandlers = (event) => {
     const accessCity = document.getElementById("cityNameInput");
     accessCity.addEventListener("input", changeCity);
 };
+
 // document.addEventListener("DOMContentLoaded",registerEventHandlers)
 
 // WAVE 4
 //How to make an API call using OpenWeather
 //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
-const findLatitudeAndLongtitude = (latitude,longitude) => {
-    axios.get('https://us1.locationiq.com/v1/search.php',
-    { 
-    params: {
-        key: LOCATION_KEY,	
-        format: 'json',
-        lat: latitude,
-        lon: longitude
-    }
-})
+// const findLatitudeAndLongtitude = () => {
+//     axios.get('https://localhost:5000/location',
+//     { 
+//     params: {
+//         key: LOCATION_KEY,	
+//         format: 'json',
+//         lat: latitude,
+//         lon: longitude
+//     }
+// })
+//     .then( (response) => {
+//         latitude = response.data[0].lat;
+//         longitude = response.data[0].lon;
+//     })
+//     .catch( (error) => {
+//         console.log("hey this error works!")
+//     })};
+
+// const LOCATIONIQ_KEY = .env['LOCATION_KEY'];
+
+// WAVE 4: API Calls
+const findLatitudeAndLongitude = (query) => {
+    let latitude, longitude;
+    axios.get('https://localhost:5000/location',
+    {
+        params: {
+            key: LOCATIONIQ_KEY,
+            q: query,
+            format: 'json',
+        }
     .then( (response) => {
         latitude = response.data[0].lat;
-        longtitude = response.data[0].lon;
+        longitude = response.data[0].lon;
+        console.log("location success! ", latitude, longitude);
+        
+        findCity(latitude, longitude);
     })
     .catch( (error) => {
-        console.log("hey this error works!")
-    })};
+        console.log("error finding lat and lon; check your code!")
+    })
+})};
+
+const findCity = (latitude, longitude) => {
+    axios.get('https://localhost:5000/location',
+    {
+        params: {
+            key: LOCATIONIQ_KEY,
+            format: 'json',
+            lat: latitude,
+            long: longitude
+        }
+    })
+    .then ( (response)  => {
+        console.log('City location success: ', response.data);
+    })
+    .catch ( (error) => {
+        console.log('error finding city; check your code!')
+    });
+};
+
+const getCurrentTemperature = (latitude, longitude) => {
+    pass
+}
+
+const onLoad = () => {
+    // do what we need to do when the page loads
+    loadControls();
+    registerEvents();
+    displayCityName();
+};
+
+onLoad();
