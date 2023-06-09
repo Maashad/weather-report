@@ -10,6 +10,9 @@ const state = {
     tempCount: 55, // change this to the const for temp pulled in from API?
     skySelection: null,
     skyDiv: null,
+    cityNameInput: null,
+    cityNameHeader: null,
+    resetButton: null,
 };
 
 const loadControls = () => {
@@ -21,6 +24,9 @@ const loadControls = () => {
     state.skySelection = document.getElementById("skySelect");
     state.skyDiv = document.getElementById("sky");
     state.landscapeDiv = document.getElementById("landscape");
+    state.cityNameInput = document.getElementById('cityNameInput');
+    state.cityNameHeader = document.getElementById("headerCityName");
+    state.resetButton = document.getElementById("cityNameReset");
 };
 
 const handleCurrentTempClick = (event) => {
@@ -69,14 +75,24 @@ const displaySky = (event) => {
     }
 };
 
+const changeCity = (event) => {
+    const value = state.cityNameInput.value;
+    state.cityNameHeader.textContent = value;
+};
+
+const resetCityName = (event) => {
+    state.cityNameInput.value = "";
+    state.cityNameHeader.textContent = "";
+};
+
 const registerEvents = (event) => {
     state.increaseTempControl.addEventListener("click", handleIncreaseTempClick);
     state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
     state.currentTempButton.addEventListener("click", handleCurrentTempClick);
     state.skySelection.addEventListener("change", displaySky);
+    state.cityNameInput.addEventListener("input", changeCity);
+    state.resetButton.addEventListener("click", resetCityName);
 };
-
-document.addEventListener("DOMContentLoaded", registerEvents);
 
 const onLoad = () => {
     // do what we need to do when the page loads
@@ -84,38 +100,30 @@ const onLoad = () => {
     registerEvents();
 };
 
-onLoad();
+document.addEventListener("DOMContentLoaded", onLoad);
 
 //WAVE 3
 //function validate(input,error)<- do we want to validate/return error message
-const changeCity =(event) => {
-    const value = document.getElementById('cityNameInput').value;
-    const cityName = document.getElementById("headerCityName")
-    cityName.textContent = value;
-}
-const registerEventHandlers = (event) => {
-    const accessCity = document.getElementById("cityNameInput");
-    accessCity.addEventListener("input", changeCity);
-};
+
 // document.addEventListener("DOMContentLoaded",registerEventHandlers)
 
 // WAVE 4
 //How to make an API call using OpenWeather
 //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
-const findLatitudeAndLongtitude = (latitude,longitude) => {
-    axios.get('https://us1.locationiq.com/v1/search.php',
-    { 
-    params: {
-        key: LOCATION_KEY,	
-        format: 'json',
-        lat: latitude,
-        lon: longitude
-    }
-})
-    .then( (response) => {
-        latitude = response.data[0].lat;
-        longtitude = response.data[0].lon;
-    })
-    .catch( (error) => {
-        console.log("hey this error works!")
-    })};
+// const findLatitudeAndLongtitude = (latitude,longitude) => {
+//     axios.get('https://us1.locationiq.com/v1/search.php',
+//     { 
+//     params: {
+//         key: LOCATION_KEY,	
+//         format: 'json',
+//         lat: latitude,
+//         lon: longitude
+//     }
+// })
+//     .then( (response) => {
+//         latitude = response.data[0].lat;
+//         longtitude = response.data[0].lon;
+//     })
+//     .catch( (error) => {
+//         console.log("hey this error works!")
+//     })};
