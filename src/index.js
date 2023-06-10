@@ -5,11 +5,9 @@ const state = {
     increaseTempControl: null,
     decreaseTempControl: null,
     landscapeDiv: null,
-    header__cityName: null,
-    headerCityNameDiv: 'Seattle, Washington',
     // Data
     tempValue: null,
-    tempCount: 55, // change this to the const for temp pulled in from API
+    tempCount: 40, // change this to the const for temp pulled in from API
     skySelection: null,
     skyDiv: null,
 };
@@ -19,19 +17,23 @@ const loadControls = () => {
     state.increaseTempControl = document.getElementById("increaseTempControl");
     state.decreaseTempControl = document.getElementById("decreaseTempControl");
     state.tempValue = document.getElementById("tempValue");
+    state.tempValue.textContent = state.tempCount
     state.currentTempButton = document.getElementById("currentTempButton");
     state.skySelection = document.getElementById("skySelect");
     state.skyDiv = document.getElementById("sky");
     state.landscapeDiv = document.getElementById("landscape");
     state.header__cityName = document.getElementById("header__cityName");
     state.headerCityNameDiv = document.getElementById("headerCityName");
+    state.accessCity = document.getElementById("cityNameInput");
 };
 
 const handleCurrentTempClick = (event) => {
     // function to call API for current temp based on geo coordinates (will pull in Kelvin)
-    // display the API data in the tempValue element
     displayLandscape();
-    console.log("clicked");
+    temperatureColor();
+    // display temp color based on local temp
+
+    // console.log("clicked");
 };
 
 const handleIncreaseTempClick = (event) => {
@@ -60,9 +62,16 @@ const displayLandscape = (event) => {
     } else if (state.tempCount >= 80) {
         state.landscapeDiv.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂"
 }};
-
+// Temperature (F)	Color
+// 80+	Red
+// 70-79	Orange
+// 60-69	Yellow
+// 50-59	Green
+// 49 or below	Teal
 const temperatureColor = (event) => {
-    
+    if (state.tempCount < 49) {
+        document.getElementById("tempValue").style.color = "teal";
+    }
 };
 
 const displaySky = (event) => {
@@ -77,7 +86,7 @@ const displaySky = (event) => {
     }
 };
 
-const registerEventHandlers = (event) => {
+const registerEvents = (event) => {
     state.increaseTempControl.addEventListener("click", handleIncreaseTempClick);
     state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
     state.currentTempButton.addEventListener("click", handleCurrentTempClick);
@@ -85,8 +94,6 @@ const registerEventHandlers = (event) => {
     const accessCity = document.getElementById("cityNameInput");
     accessCity.addEventListener("input", changeCity);
 };
-
-document.addEventListener("DOMContentLoaded", registerEventHandlers);
 
 //WAVE 3
 //function validate(input,error)<- do we want to validate/return error message
@@ -97,49 +104,42 @@ const changeCity =(event) => {
 }
 
 // WAVE 4: API Calls
-const findLatitudeAndLongitude = (q) => {
-    let latitude, longitude;
-    axios.get('https://localhost:5000/location',
-    {
-        params: {
-            // key: LOCATIONIQ_KEY,
-            q: cityNameInput.value,
-            // format: 'json',
-        }
+const findLatitudeAndLongtitude = (latitude,longtitude) => {
+    axios.get('http://127.0.0.1:5000/location',
+    { 
+    params: {
+        q: cityNameInput.value
+    }
+})
     .then( (response) => {
         latitude = response.data[0].lat;
-        longitude = response.data[0].lon;
-        // console.log("location success! ", latitude, longitude);
+        longtitude = response.data[0].lon;
+        getWeather(latitude,longtitude)
         
-        findWeather(latitude, longitude);
     })
     .catch( (error) => {
         console.log(error)
-    })
-})};
+    })}
 
-const findWeather = (latitude, longitude) => {
-    axios.get('https://localhost:5000/location',
+const getWeather = (latitude,longtitude) => {
+    axios.get('http://127.0.0.1:5000/weather',
     {
-        params: {
-            // key: LOCATIONIQ_KEY,
-            // format: 'json',
-            lat: latitude,
-            long: longitude
-        }
-    })
-    .then ( (response)  => {
-        console.log('City location success: ', response.data);
+    params:{
+        lat: latitude,
+        lon: longtitude
+    }
+})
+    .then( (response) => {
+        console.log('success!',response.data.tempValue);
     })
     .catch ( (error) => {
-        console.log(error)
-    });
-};
+        console.log('error in getWeather');
+    })}
 
 const onLoad = () => {
     // do what we need to do when the page loads
     loadControls();
-    registerEventHandlers();
+    registerEvents();
 };
 
-onLoad();
+document.addEventListener("DOMContentLoaded", onLoad);
