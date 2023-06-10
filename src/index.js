@@ -62,7 +62,7 @@ const displayLandscape = (event) => {
 }};
 
 const temperatureColor = (event) => {
-    pass
+    
 };
 
 const displaySky = (event) => {
@@ -77,14 +77,16 @@ const displaySky = (event) => {
     }
 };
 
-const registerEvents = (event) => {
+const registerEventHandlers = (event) => {
     state.increaseTempControl.addEventListener("click", handleIncreaseTempClick);
     state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
     state.currentTempButton.addEventListener("click", handleCurrentTempClick);
     state.skySelection.addEventListener("change", displaySky);
+    const accessCity = document.getElementById("cityNameInput");
+    accessCity.addEventListener("input", changeCity);
 };
 
-document.addEventListener("DOMContentLoaded", registerEvents);
+document.addEventListener("DOMContentLoaded", registerEventHandlers);
 
 //WAVE 3
 //function validate(input,error)<- do we want to validate/return error message
@@ -94,64 +96,34 @@ const changeCity =(event) => {
     cityName.textContent = value;
 }
 
-const registerEventHandlers = (event) => {
-    const accessCity = document.getElementById("cityNameInput");
-    accessCity.addEventListener("input", changeCity);
-};
-
-// document.addEventListener("DOMContentLoaded",registerEventHandlers)
-
-// WAVE 4
-//How to make an API call using OpenWeather
-//https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
-// const findLatitudeAndLongtitude = () => {
-//     axios.get('https://localhost:5000/location',
-//     { 
-//     params: {
-//         key: LOCATION_KEY,	
-//         format: 'json',
-//         lat: latitude,
-//         lon: longitude
-//     }
-// })
-//     .then( (response) => {
-//         latitude = response.data[0].lat;
-//         longitude = response.data[0].lon;
-//     })
-//     .catch( (error) => {
-//         console.log("hey this error works!")
-//     })};
-
-// const LOCATIONIQ_KEY = .env['LOCATION_KEY'];
-
 // WAVE 4: API Calls
-const findLatitudeAndLongitude = (query) => {
+const findLatitudeAndLongitude = (q) => {
     let latitude, longitude;
     axios.get('https://localhost:5000/location',
     {
         params: {
-            key: LOCATIONIQ_KEY,
-            q: query,
-            format: 'json',
+            // key: LOCATIONIQ_KEY,
+            q: cityNameInput.value,
+            // format: 'json',
         }
     .then( (response) => {
         latitude = response.data[0].lat;
         longitude = response.data[0].lon;
-        console.log("location success! ", latitude, longitude);
+        // console.log("location success! ", latitude, longitude);
         
-        findCity(latitude, longitude);
+        findWeather(latitude, longitude);
     })
     .catch( (error) => {
-        console.log("error finding lat and lon; check your code!")
+        console.log(error)
     })
 })};
 
-const findCity = (latitude, longitude) => {
+const findWeather = (latitude, longitude) => {
     axios.get('https://localhost:5000/location',
     {
         params: {
-            key: LOCATIONIQ_KEY,
-            format: 'json',
+            // key: LOCATIONIQ_KEY,
+            // format: 'json',
             lat: latitude,
             long: longitude
         }
@@ -160,19 +132,14 @@ const findCity = (latitude, longitude) => {
         console.log('City location success: ', response.data);
     })
     .catch ( (error) => {
-        console.log('error finding city; check your code!')
+        console.log(error)
     });
 };
-
-const getCurrentTemperature = (latitude, longitude) => {
-    pass
-}
 
 const onLoad = () => {
     // do what we need to do when the page loads
     loadControls();
-    registerEvents();
-    displayCityName();
+    registerEventHandlers();
 };
 
 onLoad();
