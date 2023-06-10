@@ -42,6 +42,18 @@ const handleDecreaseTempClick = (event) => {
     state.tempValue.textContent = state.tempCount;
 };
 
+const displaySky = (event) => {
+    if (state.skySelection.value === "sunny") {
+        state.skyDiv.textContent = "☀️☀️☀️☀️☀️☀️"
+    } else if (state.skySelection.value === "cloudy") {
+        state.skyDiv.textContent = "☁️☁️⛅☁️☁️☁️"
+    } else if (state.skySelection.value === "rainy") {
+        state.skyDiv.textContent = "☁️☔️☁️☁️☔️☁️"
+    } else if (state.skySelection.value === "snowy") {
+        state.skyDiv.textContent = "☁️❄️☁️❄️☁️❄️"
+    }
+};
+
 const displayLandscape = (event) => {
     if (state.tempCount < 59) {
         state.landscapeDiv.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲"
@@ -55,18 +67,6 @@ const displayLandscape = (event) => {
 
 const temperatureColor = (event) => {
     pass
-};
-
-const displaySky = (event) => {
-    if (state.skySelection.value === "sunny") {
-        state.skyDiv.textContent = "☀️☀️☀️☀️☀️☀️"
-    } else if (state.skySelection.value === "cloudy") {
-        state.skyDiv.textContent = "☁️☁️⛅☁️☁️☁️"
-    } else if (state.skySelection.value === "rainy") {
-        state.skyDiv.textContent = "☁️☔️☁️☁️☔️☁️"
-    } else if (state.skySelection.value === "snowy") {
-        state.skyDiv.textContent = "☁️❄️☁️❄️☁️❄️"
-    }
 };
 
 const registerEvents = (event) => {
@@ -97,7 +97,7 @@ const registerEventHandlers = (event) => {
     const accessCity = document.getElementById("cityNameInput");
     accessCity.addEventListener("input", changeCity);
 };
-// document.addEventListener("DOMContentLoaded",registerEventHandlers)
+document.addEventListener("DOMContentLoaded",registerEventHandlers)
 
 // WAVE 4
 //How to make an API call using OpenWeather
