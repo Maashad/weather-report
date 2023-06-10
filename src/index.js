@@ -17,11 +17,14 @@ const loadControls = () => {
     state.increaseTempControl = document.getElementById("increaseTempControl");
     state.decreaseTempControl = document.getElementById("decreaseTempControl");
     state.tempValue = document.getElementById("tempValue");
+    state.tempValue.textContent = state.tempCount
     state.currentTempButton = document.getElementById("currentTempButton");
     state.skySelection = document.getElementById("skySelect");
     state.skyDiv = document.getElementById("sky");
     state.landscapeDiv = document.getElementById("landscape");
 };
+// Can hardcode a location for temp
+// Can also add an API call 
 
 const handleCurrentTempClick = (event) => {
     // function to call API for current temp based on geo coordinates (will pull in Kelvin)
