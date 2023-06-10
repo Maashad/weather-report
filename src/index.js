@@ -7,7 +7,7 @@ const state = {
     landscapeDiv: null,
     // Data
     tempValue: null,
-    tempCount: 40, // change this to the const for temp pulled in from API
+    tempCount: 0, // change this to the const for temp pulled in from API
     skySelection: null,
     skyDiv: null,
 };
@@ -29,11 +29,9 @@ const loadControls = () => {
 
 const handleCurrentTempClick = (event) => {
     // function to call API for current temp based on geo coordinates (will pull in Kelvin)
+    state.tempValue.textContent = state.tempCount
     displayLandscape();
     temperatureColor();
-    // display temp color based on local temp
-
-    // console.log("clicked");
 };
 
 const handleIncreaseTempClick = (event) => {
@@ -62,15 +60,23 @@ const displayLandscape = (event) => {
     } else if (state.tempCount >= 80) {
         state.landscapeDiv.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂"
 }};
-// Temperature (F)	Color
-// 80+	Red
-// 70-79	Orange
-// 60-69	Yellow
-// 50-59	Green
-// 49 or below	Teal
+
+const colorChange = (color) => {
+    document.getElementById("tempValue").style.color = color
+};
+
 const temperatureColor = (event) => {
-    if (state.tempCount < 49) {
-        document.getElementById("tempValue").style.color = "teal";
+    const temp = state.tempCount
+    if (temp <= 49) {
+        colorChange("teal");
+    } else if (temp <= 59) {
+        colorChange("green");
+    } else if (temp <= 69) {
+        colorChange("yellow");
+    } else if (temp <= 79) {
+        colorChange("orange");
+    } else {
+        colorChange("red");
     }
 };
 
