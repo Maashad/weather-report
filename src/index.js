@@ -6,7 +6,7 @@ const state = {
     decreaseTempControl: null,
     landscapeDiv: null,
     tempValue: null,
-    tempCount: 0, // change this to the const for temp pulled in from API?
+    tempCount: 0,
     skySelection: null,
     skyDiv: null,
     cityNameInput: null,
@@ -29,10 +29,13 @@ const loadControls = () => {
     state.resetButton = document.getElementById("cityNameReset");
 };
 
-const handleCurrentTempClick = (event) => {
-    displayLandscape();
-    temperatureColor();
-    findLatitudeAndLongitude(state.cityNameInput.value);
+const registerEvents = (event) => {
+    state.increaseTempControl.addEventListener("click", handleIncreaseTempClick);
+    state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
+    state.currentTempButton.addEventListener("click", handleCurrentTempClick);
+    state.skySelection.addEventListener("change", displaySky);
+    state.cityNameInput.addEventListener("input", changeCity);
+    state.resetButton.addEventListener("click", resetCityName);
 };
 
 const handleIncreaseTempClick = (event) => {
@@ -101,24 +104,19 @@ const resetCityName = (event) => {
     state.cityNameHeader.textContent = "";
 };
 
-const registerEvents = (event) => {
-    state.increaseTempControl.addEventListener("click", handleIncreaseTempClick);
-    state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
-    state.currentTempButton.addEventListener("click", handleCurrentTempClick);
-    state.skySelection.addEventListener("change", displaySky);
-    state.cityNameInput.addEventListener("input", changeCity);
-    state.resetButton.addEventListener("click", resetCityName);
+const handleCurrentTempClick = (event) => {
+    displayLandscape();
+    temperatureColor();
+    findLatitudeAndLongitude(state.cityNameInput.value);
 };
 
 const findLatitudeAndLongitude = (cityName) => {
-    // wait will turn into synchronous
-    // 
     axios.get('http://127.0.0.1:5000/location',
     { 
     params: {
         q: cityName
     }
-})
+    })
     .then( (response) => {
         console.log(response.data)
         const latitude = response.data[0].lat;
@@ -141,16 +139,19 @@ const getWeather = (latitude, longitude) => {
     })
     .then( (response) => {
         console.log('success!',response.data.main.temp);
-        const currentTemp = response.data.main.temp
-        updateWeather(currentTemp);
+        const currentTempKelvin = response.data.main.temp
+        updateWeather(currentTempKelvin);
     })
     .catch ( (error) => {
         console.log('error in getWeather', error);
     })}
 
+// I want currentTempFahrenheit to = tempCount
+// state.tempValue.textContent = state.tempCount;
 const updateWeather = (temp) => {
-    const tempFahrenheit = parseInt((temp - 273.15) * (9 / 5) + 32, 10);
-    return tempFahrenheit
+    const currentTempFahrenheit = parseInt((temp - 273.15) * (9 / 5) + 32, 10);
+    state.tempCount = currentTempFahrenheit
+    state.tempValue.textContent = state.tempCount;
 }
 
 const onLoad = () => {
