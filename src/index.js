@@ -1,4 +1,3 @@
-//Wave 1
 const state = {
     currentTempButton: null,
     increaseTempControl: null,
@@ -35,6 +34,12 @@ const registerEvents = (event) => {
     state.skySelection.addEventListener("change", displaySky);
     state.cityNameInput.addEventListener("input", changeCity);
     state.resetButton.addEventListener("click", resetCityName);
+};
+
+const handleCurrentTempClick = (event) => {
+    displayLandscape();
+    temperatureColor();
+    findLatitudeAndLongitude(state.cityNameInput.value);
 };
 
 const handleIncreaseTempClick = (event) => {
@@ -103,12 +108,6 @@ const resetCityName = (event) => {
     state.cityNameHeader.textContent = "";
 };
 
-const handleCurrentTempClick = (event) => {
-    displayLandscape();
-    temperatureColor();
-    findLatitudeAndLongitude(state.cityNameInput.value);
-};
-
 const findLatitudeAndLongitude = (cityName) => {
     axios.get('http://127.0.0.1:5000/location',
     { 
@@ -145,8 +144,6 @@ const getWeather = (latitude, longitude) => {
         console.log('error in getWeather', error);
     })}
 
-// I want currentTempFahrenheit to = tempCount
-// state.tempValue.textContent = state.tempCount;
 const updateWeather = (temp) => {
     const currentTempFahrenheit = parseInt((temp - 273.15) * (9 / 5) + 32, 10);
     state.tempCount = currentTempFahrenheit
