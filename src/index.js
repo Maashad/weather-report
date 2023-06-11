@@ -28,7 +28,7 @@ const loadControls = () => {
 };
 
 const handleCurrentTempClick = (event) => {
-    // function to call API for current temp based on geo coordinates (will pull in Kelvin)
+    // tempCount = temperature returned from the API call
     state.tempValue.textContent = state.tempCount
     displayLandscape();
     temperatureColor();
@@ -38,12 +38,14 @@ const handleIncreaseTempClick = (event) => {
     // When clicking on the increase temp button, the temp value should increase by 1
     state.tempCount += 1;
     state.tempValue.textContent = state.tempCount;
+    temperatureColor();
 };
 
 const handleDecreaseTempClick = (event) => {
     // When clicking on the decrease temp button, the temp value should decrease by 1
     state.tempCount -= 1;
     state.tempValue.textContent = state.tempCount;
+    temperatureColor();
 };
 
 const displayCityName = (event) => {
@@ -110,7 +112,7 @@ const changeCity =(event) => {
 }
 
 // WAVE 4: API Calls
-const findLatitudeAndLongtitude = (latitude,longtitude) => {
+const findLatitudeAndLongtitude = (q) => {
     axios.get('http://127.0.0.1:5000/location',
     { 
     params: {
@@ -121,6 +123,7 @@ const findLatitudeAndLongtitude = (latitude,longtitude) => {
         latitude = response.data[0].lat;
         longtitude = response.data[0].lon;
         getWeather(latitude,longtitude)
+        console.log('weather for q', response.data)
         
     })
     .catch( (error) => {
