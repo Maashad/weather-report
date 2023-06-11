@@ -21,6 +21,7 @@ const loadControls = () => {
     state.increaseTempControl = document.getElementById("increaseTempControl");
     state.decreaseTempControl = document.getElementById("decreaseTempControl");
     state.tempValue = document.getElementById("tempValue");
+    state.tempValue.textContent = state.tempCount
     state.currentTempButton = document.getElementById("currentTempButton");
     state.skySelection = document.getElementById("skySelect");
     state.skyDiv = document.getElementById("sky");
@@ -29,6 +30,8 @@ const loadControls = () => {
     state.cityNameHeader = document.getElementById("headerCityName");
     state.resetButton = document.getElementById("cityNameReset");
 };
+// Can hardcode a location for temp
+// Can also add an API call 
 
 const handleCurrentTempClick = (event) => {
     // function to call API for current temp based on geo coordinates (will pull in Kelvin)
@@ -103,6 +106,18 @@ const onLoad = () => {
 
 document.addEventListener("DOMContentLoaded", onLoad);
 
+//WAVE 3
+//function validate(input,error)<- do we want to validate/return error message
+// const changeCity =(event) => {
+//     const value = document.getElementById('cityNameInput').value;
+//     const cityName = document.getElementById("headerCityName")
+//     cityName.textContent = value;
+// }
+// const registerEventHandlers = (event) => {
+//     const accessCity = document.getElementById("cityNameInput");
+//     accessCity.addEventListener("input", changeCity);
+// };
+// document.addEventListener("DOMContentLoaded",registerEventHandlers)
 
 // WAVE 4
 //How to make an API call using OpenWeather
