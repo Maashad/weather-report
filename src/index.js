@@ -1,3 +1,4 @@
+
 //Wave 1
 const state = {
     // HTML elements
@@ -65,13 +66,13 @@ const temperatureColor = (event) => {
 
 const displaySky = (event) => {
     if (state.skySelection.value === "sunny") {
-        state.skyDiv.textContent = "☀️☀️☀️☀️☀️☀️"
+        state.skyDiv.textContent = "☀️☀️☀️☀️☀️☀️";
     } else if (state.skySelection.value === "cloudy") {
-        state.skyDiv.textContent = "☁️☁️⛅☁️☁️☁️"
+        state.skyDiv.textContent = "☁️☁️⛅☁️☁️☁️";
     } else if (state.skySelection.value === "rainy") {
-        state.skyDiv.textContent = "☁️☔️☁️☁️☔️☁️"
+        state.skyDiv.textContent = "☁️☔️☁️☁️☔️☁️";
     } else if (state.skySelection.value === "snowy") {
-        state.skyDiv.textContent = "☁️❄️☁️❄️☁️❄️"
+        state.skyDiv.textContent = "☁️❄️☁️❄️☁️❄️";
     }
 };
 
@@ -102,28 +103,24 @@ const onLoad = () => {
 
 document.addEventListener("DOMContentLoaded", onLoad);
 
-//WAVE 3
-//function validate(input,error)<- do we want to validate/return error message
-
-// document.addEventListener("DOMContentLoaded",registerEventHandlers)
 
 // WAVE 4
 //How to make an API call using OpenWeather
 //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
-// const findLatitudeAndLongtitude = (latitude,longitude) => {
-//     axios.get('https://us1.locationiq.com/v1/search.php',
-//     { 
-//     params: {
-//         key: LOCATION_KEY,	
-//         format: 'json',
-//         lat: latitude,
-//         lon: longitude
-//     }
-// })
-//     .then( (response) => {
-//         latitude = response.data[0].lat;
-//         longtitude = response.data[0].lon;
-//     })
-//     .catch( (error) => {
-//         console.log("hey this error works!")
-//     })};
+const findLatitudeAndLongtitude = (latitude,longitude) => {
+    axios.get('https://us1.locationiq.com/v1/search.php',
+    { 
+    params: {
+        key: LOCATION_KEY,	
+        format: 'json',
+        lat: latitude,
+        lon: longitude
+    }
+})
+    .then( (response) => {
+        latitude = response.data[0].lat;
+        longtitude = response.data[0].lon;
+    })
+    .catch( (error) => {
+        console.log("hey this error works!")
+    })};
