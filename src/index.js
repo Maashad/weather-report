@@ -1,12 +1,10 @@
 
 //Wave 1
 const state = {
-    // HTML elements
     currentTempButton: null,
     increaseTempControl: null,
     decreaseTempControl: null,
     landscapeDiv: null,
-    // Data
     tempValue: null,
     tempCount: 0, // change this to the const for temp pulled in from API?
     skySelection: null,
@@ -30,17 +28,11 @@ const loadControls = () => {
     state.cityNameHeader = document.getElementById("headerCityName");
     state.resetButton = document.getElementById("cityNameReset");
 };
-// Can hardcode a location for temp
-// Can also add an API call 
 
 const handleCurrentTempClick = (event) => {
-    // function to call API for current temp based on geo coordinates (will pull in Kelvin)
-    // display the API data in the tempValue element
-
-    // tempCount = getWeather()
-    state.tempValue.textContent = state.tempCount
     displayLandscape();
     temperatureColor();
+    findLatitudeAndLongitude(state.cityNameInput.value);
 };
 
 const handleIncreaseTempClick = (event) => {
@@ -118,74 +110,48 @@ const registerEvents = (event) => {
     state.resetButton.addEventListener("click", resetCityName);
 };
 
-//WAVE 3
-//function validate(input,error)<- do we want to validate/return error message
-// const changeCity =(event) => {
-//     const value = document.getElementById('cityNameInput').value;
-//     const cityName = document.getElementById("headerCityName")
-//     cityName.textContent = value;
-// }
-// const registerEventHandlers = (event) => {
-//     const accessCity = document.getElementById("cityNameInput");
-//     accessCity.addEventListener("input", changeCity);
-// };
-// document.addEventListener("DOMContentLoaded",registerEventHandlers)
-
-// WAVE 4
-//How to make an API call using OpenWeather
-//https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
-// const findLatitudeAndLongtitude = (latitude,longitude) => {
-//     axios.get('https://us1.locationiq.com/v1/search.php',
-//     { 
-//     params: {
-//         key: LOCATION_KEY,	
-//         format: 'json',
-//         lat: latitude,
-//         lon: longitude
-//     }
-// })
-//     .then( (response) => {
-//         latitude = response.data[0].lat;
-//         longitude = response.data[0].lon;
-//     })
-//     .catch( (error) => {
-//         console.log("hey this error works!")
-//     })};
-
-
-// **************** From Fabiola / Amber working on API call ****************
-// WAVE 4: API Calls
-const findLatitudeAndLongtitude = (latitude,longtitude) => {
+const findLatitudeAndLongitude = (cityName) => {
+    // wait will turn into synchronous
+    // 
     axios.get('http://127.0.0.1:5000/location',
     { 
     params: {
-        q: cityNameInput.value
+        q: cityName
     }
 })
     .then( (response) => {
-        latitude = response.data[0].lat;
-        longtitude = response.data[0].lon;
+        console.log(response.data)
+        const latitude = response.data[0].lat;
+        const longtitude = response.data[0].lon;
+        
         getWeather(latitude,longtitude)
         
     })
     .catch( (error) => {
         console.log(error)
-    })}
+})};
 
-const getWeather = () => {
+const getWeather = (latitude, longitude) => {
     axios.get('http://127.0.0.1:5000/weather',
     {
     params:{
         lat: latitude,
-        lon: longtitude
+        lon: longitude,
     }
-})
+    })
     .then( (response) => {
-        console.log('success!',response.data.tempValue);
+        console.log('success!',response.data.main.temp);
+        const currentTemp = response.data.main.temp
+        updateWeather(currentTemp);
     })
     .catch ( (error) => {
-        console.log('error in getWeather');
+        console.log('error in getWeather', error);
     })}
+
+const updateWeather = (temp) => {
+    const tempFahrenheit = parseInt((temp - 273.15) * (9 / 5) + 32, 10);
+    return tempFahrenheit
+}
 
 const onLoad = () => {
     // do what we need to do when the page loads
