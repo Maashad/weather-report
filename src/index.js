@@ -8,7 +8,7 @@ const state = {
     landscapeDiv: null,
     // Data
     tempValue: null,
-    tempCount: 55, // change this to the const for temp pulled in from API?
+    tempCount: 0, // change this to the const for temp pulled in from API?
     skySelection: null,
     skyDiv: null,
     cityNameInput: null,
@@ -36,20 +36,25 @@ const loadControls = () => {
 const handleCurrentTempClick = (event) => {
     // function to call API for current temp based on geo coordinates (will pull in Kelvin)
     // display the API data in the tempValue element
+
+    // tempCount = getWeather()
+    state.tempValue.textContent = state.tempCount
     displayLandscape();
-    console.log("clicked");
+    temperatureColor();
 };
 
 const handleIncreaseTempClick = (event) => {
     // When clicking on the increase temp button, the temp value should increase by 1
     state.tempCount += 1;
     state.tempValue.textContent = state.tempCount;
+    temperatureColor();
 };
 
 const handleDecreaseTempClick = (event) => {
     // When clicking on the decrease temp button, the temp value should decrease by 1
     state.tempCount -= 1;
     state.tempValue.textContent = state.tempCount;
+    temperatureColor();
 };
 
 const displayLandscape = (event) => {
@@ -63,8 +68,23 @@ const displayLandscape = (event) => {
         state.landscapeDiv.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂"
 }};
 
+const colorChange = (color) => {
+    document.getElementById("tempValue").style.color = color
+};
+
 const temperatureColor = (event) => {
-    pass
+    const temp = state.tempCount
+    if (temp <= 49) {
+        colorChange("teal");
+    } else if (temp <= 59) {
+        colorChange("green");
+    } else if (temp <= 69) {
+        colorChange("yellow");
+    } else if (temp <= 79) {
+        colorChange("orange");
+    } else {
+        colorChange("red");
+    }
 };
 
 const displaySky = (event) => {
@@ -98,14 +118,6 @@ const registerEvents = (event) => {
     state.resetButton.addEventListener("click", resetCityName);
 };
 
-const onLoad = () => {
-    // do what we need to do when the page loads
-    loadControls();
-    registerEvents();
-};
-
-document.addEventListener("DOMContentLoaded", onLoad);
-
 //WAVE 3
 //function validate(input,error)<- do we want to validate/return error message
 // const changeCity =(event) => {
@@ -122,20 +134,63 @@ document.addEventListener("DOMContentLoaded", onLoad);
 // WAVE 4
 //How to make an API call using OpenWeather
 //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={WEATHER_KEY}
-const findLatitudeAndLongtitude = (latitude,longitude) => {
-    axios.get('https://us1.locationiq.com/v1/search.php',
+// const findLatitudeAndLongtitude = (latitude,longitude) => {
+//     axios.get('https://us1.locationiq.com/v1/search.php',
+//     { 
+//     params: {
+//         key: LOCATION_KEY,	
+//         format: 'json',
+//         lat: latitude,
+//         lon: longitude
+//     }
+// })
+//     .then( (response) => {
+//         latitude = response.data[0].lat;
+//         longitude = response.data[0].lon;
+//     })
+//     .catch( (error) => {
+//         console.log("hey this error works!")
+//     })};
+
+
+// **************** From Fabiola / Amber working on API call ****************
+// WAVE 4: API Calls
+const findLatitudeAndLongtitude = (latitude,longtitude) => {
+    axios.get('http://127.0.0.1:5000/location',
     { 
     params: {
-        key: LOCATION_KEY,	
-        format: 'json',
-        lat: latitude,
-        lon: longitude
+        q: cityNameInput.value
     }
 })
     .then( (response) => {
         latitude = response.data[0].lat;
         longtitude = response.data[0].lon;
+        getWeather(latitude,longtitude)
+        
     })
     .catch( (error) => {
-        console.log("hey this error works!")
-    })};
+        console.log(error)
+    })}
+
+const getWeather = () => {
+    axios.get('http://127.0.0.1:5000/weather',
+    {
+    params:{
+        lat: latitude,
+        lon: longtitude
+    }
+})
+    .then( (response) => {
+        console.log('success!',response.data.tempValue);
+    })
+    .catch ( (error) => {
+        console.log('error in getWeather');
+    })}
+
+const onLoad = () => {
+    // do what we need to do when the page loads
+    loadControls();
+    registerEvents();
+};
+
+document.addEventListener("DOMContentLoaded", onLoad);
