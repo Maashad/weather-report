@@ -109,7 +109,7 @@ color: white;
 .garden__content {
 background-color: white;
 min-height: 200px;
-max-width: fit-content;
+max-width: 500px;
 margin: auto;
 padding: 2rem;
 

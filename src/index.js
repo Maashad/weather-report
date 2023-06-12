@@ -29,6 +29,8 @@ const loadControls = () => {
 
 const registerEvents = (event) => {
     state.increaseTempControl.addEventListener("click", handleIncreaseTempClick);
+    state.increaseTempControl.addEventListener("click", displayLandscape);
+    state.decreaseTempControl.addEventListener("click", displayLandscape);
     state.decreaseTempControl.addEventListener("click", handleDecreaseTempClick);
     state.currentTempButton.addEventListener("click", handleCurrentTempClick);
     state.skySelection.addEventListener("change", displaySky);
@@ -58,13 +60,13 @@ const handleDecreaseTempClick = (event) => {
 
 const displayLandscape = (event) => {
     if (state.tempCount < 59) {
-        state.landscapeDiv.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲"
+        state.landscapeDiv.textContent = "🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲";
     } else if (state.tempCount <= 69) {
-        state.landscapeDiv.textContent = "🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃"
+        state.landscapeDiv.textContent = "🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃";
     } else if (state.tempCount <= 79) {
-        state.landscapeDiv.textContent = "🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷"
+        state.landscapeDiv.textContent = "🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷";
     } else if (state.tempCount >= 80) {
-        state.landscapeDiv.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂"
+        state.landscapeDiv.textContent = "🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂";
 }};
 
 const colorChange = (color) => {
